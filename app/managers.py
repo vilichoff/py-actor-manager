@@ -15,7 +15,8 @@ class ActorManager:
         )
 
     def create(self, first_name: str, last_name: str) -> None:
-        query = f"INSERT INTO {self.table_name} (first_name, last_name) VALUES (?, ?)"
+        query = (f"INSERT INTO {self.table_name} "
+                 "(first_name, last_name) VALUES (?, ?)")
         self._connection.execute(query, (first_name, last_name))
         self._connection.commit()
 
