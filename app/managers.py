@@ -22,15 +22,15 @@ class ActorManager:
         self._connection.commit()
 
     def all(self):
-        actor_manager_cursor = self._connection.execute(
+        actors_cursor = self._connection.execute(
             f"SELECT * FROM {self.table_name}"
         )
 
         return [
-            Actor(*row) for row in actor_manager_cursor
+            Actor(*row) for row in actors_cursor
         ]
 
-    def update(self, pk: str, new_first_name: str, new_last_name: str):
+    def update(self, pk: int, new_first_name: str, new_last_name: str):
         self._connection.execute(
             f"UPDATE {self.table_name} "
             "SET first_name = ?, last_name = ? "  # Убран лишний пробел перед запятой
@@ -39,7 +39,7 @@ class ActorManager:
         )
         self._connection.commit()
 
-    def delete(self, pk: str):
+    def delete(self, pk: int):
         self._connection.execute(
             f"DELETE FROM {self.table_name} WHERE id = ?",
             (pk,)

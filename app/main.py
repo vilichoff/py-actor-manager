@@ -5,7 +5,7 @@ from app.managers import ActorManager
 def run_demo():
     # Initialize the manager with the database name and table name
     db_name = "cinema_db.sqlite"
-    table_name = "actor_manager"
+    table_name = "actors"
     manager = ActorManager(db_name, table_name)
 
     # Assign the manager to the Actor class (ORM style)
