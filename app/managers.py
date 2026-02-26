@@ -3,4 +3,45 @@ import sqlite3
 from app.models import Actor
 
 
-# add manager here
+class ActorManager:
+    def __init__(self, db_name: str, table_name: str):
+        self._connection = sqlite3.connect(db_name)
+        self.table_name = table_name
+        self._connection.execute(
+            f"CREATE TABLE IF NOT EXISTS {table_name} ("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "first_name TEXT, "
+            "last_name TEXT)"
+        )
+
+    def create(self, first_name: str, last_name: str):
+        self._connection.execute(
+            f"INSERT INTO {self.table_name} (first_name, last_name) VALUES (?, ?)",
+            (first_name, last_name)  # Добавлен пробел после запятой
+        )
+        self._connection.commit()
+
+    def all(self):
+        actor_manager_cursor = self._connection.execute(
+            f"SELECT * FROM {self.table_name}"
+        )
+
+        return [
+            Actor(*row) for row in actor_manager_cursor
+        ]
+
+    def update(self, pk: str, new_first_name: str, new_last_name: str):
+        self._connection.execute(
+            f"UPDATE {self.table_name} "
+            "SET first_name = ?, last_name = ? "  # Убран лишний пробел перед запятой
+            "WHERE id = ?",
+            (new_first_name, new_last_name, pk)
+        )
+        self._connection.commit()
+
+    def delete(self, pk: str):
+        self._connection.execute(
+            f"DELETE FROM {self.table_name} WHERE id = ?",
+            (pk,)
+        )
+        self._connection.commit()
